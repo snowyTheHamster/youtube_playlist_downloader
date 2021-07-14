@@ -14,7 +14,9 @@ layout = [
         [sg.Text('Select Save Folder:')],
         [sg.Input(key='_SAVE_DIR_'), sg.FolderBrowse()],
         [sg.Text('')],
-        [sg.Text('Download Video or audio:'), sg.Radio('Video', "_RADIO_MODE_", default=True, key='Radio_1'), sg.Radio('Audio', "_RADIO_MODE_", key='Radio_2')],
+        [sg.Text('Download Video or audio:'), sg.Radio('Video', "_RADIO_MODE_", default=True, key='Radio_video'), sg.Radio('Audio', "_RADIO_MODE_", key='Radio_audio')],
+        [sg.Text('')],
+        [sg.Text('Video Quality'), sg.Radio('Low (progressive)', "_QUALITY_", default=True, key='Radio_low'), sg.Radio('Highest (Adaptive + ffmpeg merging)', "_QUALITY_", key='Radio_high')],
         [sg.Button("Process", size=(10, 1), bind_return_key=True, key='_PROCESS_')],
 	    [sg.Output(size=(80, 20))],
     ]
@@ -36,11 +38,15 @@ try:
                 print('please specify an empty folder to save the files')
             elif os.listdir(save_dir) :
                 print('The Save Folder must be Empty')
-            elif values['Radio_1'] == True:
-                print('download youtube videos as video files')
-                download_yt_playlist.dl_yt_videos(playlist_url, save_dir)
-            elif values['Radio_2'] == True:
-                print('download youtube videos as audio files')
+            elif values['Radio_video'] == True:
+                if values['Radio_high'] == True:
+                    print('Adaptive videos - Highest Quality')
+                    download_yt_playlist.dl_yt_videos_high(playlist_url, save_dir)
+                elif values['Radio_low'] == True:
+                    print('Progressive videos - Lower Quality')
+                    download_yt_playlist.dl_yt_videos_low(playlist_url, save_dir)
+            elif values['Radio_audio'] == True:
+                print('save as audio files')
                 download_yt_playlist_audio_only.dl_yt_audios(playlist_url, save_dir)
 
     window.close()

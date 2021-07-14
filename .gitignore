@@ -5,3 +5,4 @@ build/
 *.spec
 *.mp3
 *.mp4
+test.py
